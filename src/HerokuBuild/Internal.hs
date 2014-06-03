@@ -1,3 +1,0 @@
-module HerokuBuild.Internal
-    (
-    ) where

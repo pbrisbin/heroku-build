@@ -14,8 +14,10 @@ Library
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
   Exposed-Modules:      HerokuBuild
-  Other-Modules:        HerokuBuild.Internal
-  Build-Depends:        base >= 4 && < 5
+  Default-Extensions:   OverloadedStrings
+  Build-Depends:        base  >= 4    && < 5
+                      , aeson >= 0.6  && < 0.8
+                      , text  >= 0.11 && < 2.0
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -24,8 +26,11 @@ Test-Suite spec
                       , test
   Ghc-Options:          -Wall
   Main-Is:              Spec.hs
+  Default-Extensions:   OverloadedStrings
   Build-Depends:        base
                       , hspec
+                      , aeson >= 0.6  && < 0.8
+                      , text  >= 0.11 && < 2.0
 
 Source-Repository head
   Type:                 git
