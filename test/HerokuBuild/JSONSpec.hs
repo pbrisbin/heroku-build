@@ -1,8 +1,8 @@
 module HerokuBuild.JSONSpec (main, spec) where
 
 import HerokuBuild.JSON
-import qualified Data.Text as T
-
+import Data.Aeson (encode, decode)
+import qualified Data.ByteString.Lazy as BS
 import Test.Hspec
 
 main :: IO ()
@@ -10,25 +10,22 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-    describe "encodeBuild" $ do
+    describe "Build" $ do
         it "encodes correctly" $ do
-            let expected = T.concat
-                    [ "{"
-                    ,   "\"source_blob\":{"
-                    ,     "\"url\":\"https://example.com\","
-                    ,     "\"version\":\"abc123\""
-                    ,   "}"
-                    , "}"
-                    ]
+            let encoded = encode $ Build undefined undefined
+                    (SourceBlob "https://example.com" "abc123")
 
-                actual = encodeBuild $ Build
-                    undefined undefined (SourceBlob "https://example.com" "abc123")
+            encoded `shouldBe` BS.concat
+                [ "{"
+                ,   "\"source_blob\":{"
+                ,     "\"url\":\"https://example.com\","
+                ,     "\"version\":\"abc123\""
+                ,   "}"
+                , "}"
+                ]
 
-            actual `shouldBe` expected
-
-    describe "decodeBuild" $ do
         it "decodes correctly" $ do
-            let response = T.concat
+            let decoded = decode $ BS.concat
                     [ "{"
                     , "  \"created_at\": \"2014-05-09T19:43:56+00:00\","
                     , "  \"id\": \"22f637e2-05ab-4e71-bb8a-8ea65c88577b\","
@@ -48,9 +45,6 @@ spec = do
                     , "}"
                     ]
 
-                expected = Right $ Build
-                    "22f637e2-05ab-4e71-bb8a-8ea65c88577b"
-                    Pending
-                    (SourceBlob "https://example.com" "abc123")
-
-            decodeBuild response `shouldBe` expected
+            decoded `shouldBe` (Just $ Build
+                "22f637e2-05ab-4e71-bb8a-8ea65c88577b" Pending
+                (SourceBlob "https://example.com" "abc123"))

@@ -4,17 +4,12 @@ module HerokuBuild.JSON
     , SourceBlob(..)
     , Url
     , Version
-    , encodeBuild
-    , decodeBuild
     ) where
 
 import Control.Applicative
 import Control.Monad
 import Data.Aeson hiding (Success)
 import Data.Text (Text)
-import Data.Text.Lazy (toStrict)
-import Data.Text.Lazy.Builder (fromText, toLazyText)
-import Data.Text.Lazy.Encoding (decodeUtf8, encodeUtf8)
 
 data Build = Build
     { buildId :: Text
@@ -55,9 +50,3 @@ instance FromJSON Status where
     parseJSON (String "succeeded") = pure Success
     parseJSON (String s) = pure $ Unknown s
     parseJSON _ = mzero
-
-encodeBuild :: Build -> Text
-encodeBuild = toStrict . decodeUtf8 . encode
-
-decodeBuild :: Text -> Either String Build
-decodeBuild = eitherDecode . encodeUtf8 . toLazyText . fromText
