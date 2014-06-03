@@ -1,21 +1,27 @@
 # heroku-build
 
-TODO: Write description here
+*A work in progress...*
+
+(Eventually) use the Heroku API to build a slug on one dyno and move it 
+to another. Will allow us to have one App dedicated to compilation of 
+slugs for many others.
 
 ## Installation
 
-TODO: Write installation instructions here
+```
+# TODO
+```
 
 ## Usage
 
-TODO: Write usage instructions here
-
-## How to run tests
-
 ```
-cabal configure --enable-tests && cabal build && cabal test
+# TODO
 ```
 
-## Contributing
+## Development
 
-TODO: Write contribution instructions here
+```
+% git clone ... && cd ...
+% cabal install --dependencies-only --enable-tests
+% cabal test
+```
