@@ -1,6 +1,6 @@
-module HerokuBuildSpec (main, spec) where
+module HerokuBuild.JSONSpec (main, spec) where
 
-import HerokuBuild
+import HerokuBuild.JSON
 import qualified Data.Text as T
 
 import Test.Hspec
