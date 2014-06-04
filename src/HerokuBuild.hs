@@ -1,21 +1,14 @@
-module HerokuBuild where
+module HerokuBuild (module X) where
 
-import System.Environment (getArgs)
 import qualified Data.Text as T
 
-import HerokuBuild.API
-import HerokuBuild.JSON
-import HerokuBuild.Options
+import HerokuBuild.API as X
+import HerokuBuild.JSON as X
+import HerokuBuild.Options as X
 
 main :: IO ()
 main = withOptions run
 
--- TODO: further argument validation
 run :: Options -> IO ()
-run (Options Start) = do
-    (url:version:_) <- getArgs
-    postHeroku "/builds" $ newBuild (T.pack url) (T.pack version)
-
-run (Options Status) = do
-    (bid:_) <- getArgs
-    print . status =<< getHeroku ("/builds/" `T.append` T.pack bid)
+run (Options (Start url version)) = postHeroku "/builds" $ newBuild url version
+run (Options (Status b)) = print . status =<< getHeroku ("/builds/" `T.append` b)

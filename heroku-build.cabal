@@ -15,11 +15,25 @@ Library
   GHC-Options:          -Wall
   Exposed-Modules:      HerokuBuild
   Other-Modules:        HerokuBuild.JSON
+  GHC-Options:          -Wall
+  Default-Extensions:   OverloadedStrings
   Default-Extensions:   OverloadedStrings
   Build-Depends:        base                 >= 4     && <  5
                       , aeson                >= 0.6   && <  0.8
                       , text                 >= 0.11  && <  2.0
                       , optparse-applicative >= 0.9.0 && <= 1.0
+
+Executable heroku-build
+  Default-Language:     Haskell2010
+  Main-Is:              main.hs
+  HS-Source-Dirs:       src
+  GHC-Options:          -Wall
+  Default-Extensions:   OverloadedStrings
+  Build-Depends:        base
+                      , aeson
+                      , bytestring
+                      , text
+                      , optparse-applicative
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0

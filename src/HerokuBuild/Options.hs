@@ -5,10 +5,12 @@ module HerokuBuild.Options
     ) where
 
 import Options.Applicative
+import Data.Text (Text)
+import qualified Data.Text as T
 
 data Options = Options Command
 
-data Command = Start | Status
+data Command = Start Text Text | Status Text
 
 withOptions :: (Options -> IO ()) -> IO ()
 withOptions f = execParser prog >>= f
@@ -17,7 +19,7 @@ prog :: ParserInfo Options
 prog = info (helper <*> opts) $
     fullDesc <> progDesc "Interact with the heroku build API"
 
--- TODO: collect any global options
+-- TODO: global options
 opts :: Parser Options
 opts = subparser $
     command "start"  (info startOptions $
@@ -25,10 +27,11 @@ opts = subparser $
     <> command "status" (info statusOptions $
         progDesc "Check the status of a build")
 
--- TODO: collect any start-specific options
 startOptions :: Parser Options
-startOptions = pure $ Options Start
+startOptions = Options <$> (Start
+    <$> fmap T.pack (argument str (metavar "SOURCE-URL"))
+    <*> fmap T.pack (argument str (metavar "VERSION")))
 
--- TODO: collect any status-specific options
 statusOptions :: Parser Options
-statusOptions = pure $ Options Status
+statusOptions = Options <$> (Status
+    <$> fmap T.pack (argument str (metavar "BUILD-ID")))

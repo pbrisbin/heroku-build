@@ -1,6 +1,6 @@
 module HerokuBuildSpec where
 
-import HerokuBuild hiding (main)
+import HerokuBuild
 import Test.Hspec
 
 main :: IO ()
