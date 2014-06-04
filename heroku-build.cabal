@@ -14,41 +14,38 @@ Library
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
   Exposed-Modules:      HerokuBuild
-  Other-Modules:        HerokuBuild.JSON
+                      , HerokuBuild.JSON
+                      , HerokuBuild.API
+                      , HerokuBuild.Options
   GHC-Options:          -Wall
-  Default-Extensions:   OverloadedStrings
   Default-Extensions:   OverloadedStrings
   Build-Depends:        base                 >= 4     && <  5
                       , aeson                >= 0.6   && <  0.8
                       , text                 >= 0.11  && <  2.0
                       , optparse-applicative >= 0.9.0 && <= 1.0
 
-Executable heroku-build
-  Default-Language:     Haskell2010
-  Main-Is:              main.hs
-  HS-Source-Dirs:       src
-  GHC-Options:          -Wall
-  Default-Extensions:   OverloadedStrings
-  Build-Depends:        base
-                      , aeson
-                      , bytestring
-                      , text
-                      , optparse-applicative
-
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
   Default-Language:     Haskell2010
-  Hs-Source-Dirs:       src
-                      , test
+  Hs-Source-Dirs:       test
   Ghc-Options:          -Wall
-  Main-Is:              Spec.hs
   Default-Extensions:   OverloadedStrings
+  Main-Is:              Spec.hs
   Build-Depends:        base
+                      , heroku-build
                       , hspec
                       , aeson
                       , bytestring
+
+Executable heroku-build
+  Default-Language:     Haskell2010
+  Main-Is:              main.hs
+  GHC-Options:          -Wall
+  Default-Extensions:   OverloadedStrings
+  Build-Depends:        base
+                      , heroku-build
                       , text
-                      , optparse-applicative
+                      , optparse-applicative >= 0.9.0 && <= 1.0
 
 Source-Repository head
   Type:                 git

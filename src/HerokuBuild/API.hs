@@ -1,13 +1,16 @@
 module HerokuBuild.API
-    ( postHeroku
+    ( ApiKey
+    , postHeroku
     , getHeroku
     ) where
 
 import Data.Aeson
 import Data.Text (Text)
 
-postHeroku :: ToJSON a => Text -> a -> IO ()
+type ApiKey = Text
+
+postHeroku :: ToJSON a => ApiKey -> Text -> a -> IO ()
 postHeroku = undefined
 
-getHeroku :: FromJSON a => Text -> IO a
+getHeroku :: FromJSON a => ApiKey -> Text -> IO a
 getHeroku = undefined
