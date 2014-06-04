@@ -4,6 +4,7 @@ module HerokuBuild.JSON
     , SourceBlob(..)
     , Url
     , Version
+    , newBuild
     ) where
 
 import Control.Applicative
@@ -50,3 +51,6 @@ instance FromJSON Status where
     parseJSON (String "succeeded") = pure Success
     parseJSON (String s) = pure $ Unknown s
     parseJSON _ = mzero
+
+newBuild :: Url -> Version -> Build
+newBuild url version = Build undefined undefined $ SourceBlob url version

@@ -12,8 +12,7 @@ spec :: Spec
 spec = do
     describe "Build" $ do
         it "encodes correctly" $ do
-            let encoded = encode $ Build undefined undefined
-                    (SourceBlob "https://example.com" "abc123")
+            let encoded = encode $ newBuild "https://example.com" "abc123"
 
             encoded `shouldBe` BS.concat
                 [ "{"
@@ -45,6 +44,4 @@ spec = do
                     , "}"
                     ]
 
-            decoded `shouldBe` (Just $ Build
-                "22f637e2-05ab-4e71-bb8a-8ea65c88577b" Pending
-                (SourceBlob "https://example.com" "abc123"))
+            fmap status decoded `shouldBe` Just Pending
