@@ -4,8 +4,8 @@ Author:                 Pat Brisbin <pbrisbin@gmail.com>
 Maintainer:             Pat Brisbin <pbrisbin@gmail.com>
 License:                BSD3
 License-File:           LICENSE
--- Synopsis:               
--- Description:            
+Synopsis:               Interact with the Heroku Build API
+Description:            Interact with the Heroku Build API
 Cabal-Version:          >= 1.10
 Build-Type:             Simple
 
@@ -43,13 +43,13 @@ Test-Suite spec
   Ghc-Options:          -Wall
   Main-Is:              Spec.hs
   Default-Extensions:   OverloadedStrings
-  -- TODO: WTF do I have to re-state all these depends?
   Build-Depends:        base
                       , hspec
                       , aeson
                       , bytestring
                       , text
                       , optparse-applicative
+
 Source-Repository head
   Type:                 git
---  Location:             
+  Location:             https://github.com/pbrisbin/heroku-build
