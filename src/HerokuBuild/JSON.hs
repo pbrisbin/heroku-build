@@ -2,6 +2,7 @@ module HerokuBuild.JSON
     ( Build(..)
     , Status(..)
     , SourceBlob(..)
+    , Slug(..)
     , Url
     , Version
     , newBuild

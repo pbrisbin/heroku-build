@@ -33,7 +33,7 @@ spec = do
                     , "    \"version\": \"abc123\""
                     , "    },"
                     , "  \"slug\": {"
-                    , "    \"id\": null"
+                    , "    \"id\": \"361d1603-1fb4-4189-a3d7-cbc46967e21f\""
                     , "    },"
                     , "  \"status\": \"pending\","
                     , "  \"updated_at\": \"2014-05-09T19:43:56+00:00\","
@@ -45,3 +45,5 @@ spec = do
                     ]
 
             fmap status decoded `shouldBe` Just Pending
+            fmap slug decoded `shouldBe`
+                Just (Slug (Just "361d1603-1fb4-4189-a3d7-cbc46967e21f"))
