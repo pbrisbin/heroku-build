@@ -8,9 +8,9 @@ import Options.Applicative
 import Data.Text (Text)
 import qualified Data.Text as T
 
-data Options = Options Command
+data Options = Options String Command
 
-data Command = Start Text Text | Status Text
+data Command = Start Text Text | Status String | Release String String
 
 withOptions :: (Options -> IO ()) -> IO ()
 withOptions f = execParser prog >>= f
@@ -19,19 +19,30 @@ prog :: ParserInfo Options
 prog = info (helper <*> opts) $
     fullDesc <> progDesc "Interact with the heroku build API"
 
--- TODO: global options
 opts :: Parser Options
-opts = subparser $
-    command "start"  (info startOptions $
-        progDesc "Start a build on the compilation app")
-    <> command "status" (info statusOptions $
-        progDesc "Check the status of a build")
+opts = Options
+    <$> strOption
+        (long "app"
+      <> short 'a'
+      <> metavar "COMPILE-APP"
+      <> help "Heroku app on which to compile")
+    <*> subparser
+        (cmd "start" startOptions "Start a build on the compilation app"
+      <> cmd "status" statusOptions "Check the status of a build"
+      <> cmd "release" releaseOptions "Release a successful build")
 
-startOptions :: Parser Options
-startOptions = Options <$> (Start
+  where
+    cmd c o d = command c (info o $ progDesc d)
+
+startOptions :: Parser Command
+startOptions = Start
     <$> fmap T.pack (argument str (metavar "SOURCE-URL"))
-    <*> fmap T.pack (argument str (metavar "VERSION")))
+    <*> fmap T.pack (argument str (metavar "VERSION"))
 
-statusOptions :: Parser Options
-statusOptions = Options <$> (Status
-    <$> fmap T.pack (argument str (metavar "BUILD-ID")))
+statusOptions :: Parser Command
+statusOptions = Status <$> argument str (metavar "BUILD-ID")
+
+releaseOptions :: Parser Command
+releaseOptions = Release
+    <$> argument str (metavar "BUILD-ID")
+    <*> argument str (metavar "RELEASE-APP")

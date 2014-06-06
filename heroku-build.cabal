@@ -19,10 +19,13 @@ Library
                       , HerokuBuild.Options
   GHC-Options:          -Wall
   Default-Extensions:   OverloadedStrings
-  Build-Depends:        base                 >= 4     && <  5
-                      , aeson                >= 0.6   && <  0.8
-                      , text                 >= 0.11  && <  2.0
-                      , optparse-applicative >= 0.9.0 && <= 1.0
+  Build-Depends:        base                 >= 4.6.0  && <  5
+                      , aeson                >= 0.6    && < 0.8
+                      , bytestring           >= 0.10.4 && < 0.11
+                      , text                 >= 0.11   && < 2.0
+                      , optparse-applicative >= 0.9.0  && < 1.0
+                      , http-conduit         >= 2.1.2  && < 3.0
+                      , http-types
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -44,8 +47,7 @@ Executable heroku-build
   Default-Extensions:   OverloadedStrings
   Build-Depends:        base
                       , heroku-build
-                      , text
-                      , optparse-applicative >= 0.9.0 && <= 1.0
+                      , bytestring
 
 Source-Repository head
   Type:                 git

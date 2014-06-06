@@ -1,16 +1,50 @@
 module HerokuBuild.API
     ( ApiKey
-    , postHeroku
     , getHeroku
+    , postHeroku
+    , postHeroku'
     ) where
 
 import Data.Aeson
-import Data.Text (Text)
+import Data.ByteString (ByteString)
+import Network.HTTP.Conduit
+import Network.HTTP.Types
+import qualified Data.ByteString.Lazy as L
 
-type ApiKey = Text
+type ApiKey = ByteString
 
-postHeroku :: ToJSON a => ApiKey -> Text -> a -> IO ()
-postHeroku = undefined
+getHeroku :: FromJSON a => ApiKey -> String -> IO (Maybe a)
+getHeroku k p = heroku k p $ \r -> r { method = "GET" }
 
-getHeroku :: FromJSON a => ApiKey -> Text -> IO a
-getHeroku = undefined
+postHeroku :: (ToJSON a, FromJSON b) => ApiKey -> String -> a -> IO (Maybe b)
+postHeroku k p resource = heroku k p $ \r -> r
+    { method = "POST", requestBody = RequestBodyLBS $ encode resource }
+
+-- | Same as @'postHeroku'@ but discards the response body
+postHeroku' :: ToJSON a => ApiKey -> String -> a -> IO ()
+postHeroku' k p resource = heroku' k p $ \r -> r
+    { method = "POST", requestBody = RequestBodyLBS $ encode resource }
+
+heroku :: FromJSON a => ApiKey -> String -> (Request -> Request) -> IO (Maybe a)
+heroku k p modify = fmap decode $ herokuReq k p modify
+
+heroku' :: ApiKey -> String -> (Request -> Request) -> IO ()
+heroku' k p modify = herokuReq k p modify >> return ()
+
+herokuReq :: ApiKey -> String -> (Request -> Request) -> IO L.ByteString
+herokuReq k p modify = do
+    req <- parseUrl $ herokuApi ++ p
+    rsp <- withManager $ httpLbs $ modify $ req
+            { requestHeaders = herokuHeaders k }
+
+    return $ responseBody rsp
+
+herokuApi :: String
+herokuApi = "https://api.heroku.com"
+
+herokuHeaders :: ApiKey -> [Header]
+herokuHeaders key =
+    [ (hContentType, "application/json")
+    , (hAccept, "application/vnd.heroku+json; version=3")
+    , (hAuthorization, key)
+    ]
