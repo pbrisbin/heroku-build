@@ -48,6 +48,7 @@ Executable heroku-build
   Build-Depends:        base
                       , heroku-build
                       , bytestring
+                      , base64-bytestring
 
 Source-Repository head
   Type:                 git

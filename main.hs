@@ -1,8 +1,9 @@
 module Main (main) where
 
-import System.Exit (exitFailure)
 import System.Environment (lookupEnv)
+import System.Exit (exitFailure)
 import System.IO (hPutStrLn, stderr)
+import qualified Data.ByteString.Base64 as BS
 import qualified Data.ByteString.Char8 as BS
 
 import HerokuBuild
@@ -35,8 +36,14 @@ getApiKey = do
     mk <- lookupEnv "HEROKU_API_KEY"
 
     case mk of
-        Just k -> return $ BS.pack k
+        Just k -> return $ encode k
         Nothing -> err "HEROKU_API_KEY environment variable not set"
+
+  where
+    encode :: String -> ApiKey
+    encode k =
+        let encoded = BS.encode $ ":" `BS.append` BS.pack k
+        in "Basic " `BS.append` encoded
 
 err :: String -> IO a
 err msg = do
