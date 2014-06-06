@@ -47,3 +47,9 @@ spec = do
             fmap status decoded `shouldBe` Just Pending
             fmap slug decoded `shouldBe`
                 Just (Slug (Just "361d1603-1fb4-4189-a3d7-cbc46967e21f"))
+
+    describe "Slug" $ do
+        it "encodes correctly" $ do
+            let encoded = encode $ Slug (Just "some-slug-id")
+
+            encoded `shouldBe` "{\"slug\":\"some-slug-id\"}"
