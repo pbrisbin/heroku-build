@@ -12,6 +12,7 @@ import Control.Applicative
 import Control.Monad
 import Data.Aeson hiding (Success)
 import Data.Text (Text)
+import qualified Data.Text as T
 
 data Build = Build
     { buildId :: Text
@@ -20,7 +21,12 @@ data Build = Build
     , slug :: Slug
     } deriving (Eq, Show)
 
-data Status = Pending | Success | Unknown Text deriving (Eq, Show)
+data Status = Pending | Success | Unknown Text deriving (Eq)
+
+instance Show Status where
+    show Pending = "pending"
+    show Success = "succeeded"
+    show (Unknown t) = T.unpack t
 
 data SourceBlob = SourceBlob Url Version deriving (Eq, Show)
 
