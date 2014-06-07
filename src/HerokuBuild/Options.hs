@@ -32,7 +32,7 @@ opts = Options
       <> cmd "release" releaseOptions "Release a successful build")
 
   where
-    cmd c o d = command c (info o $ progDesc d)
+    cmd c o d = command c (info (helper <*> o) $ progDesc d)
 
 startOptions :: Parser Command
 startOptions = Start
