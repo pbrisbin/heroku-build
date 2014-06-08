@@ -13,36 +13,35 @@ data Options = Options String Command
 data Command = Start Text Text | Status String | Release String String
 
 withOptions :: (Options -> IO ()) -> IO ()
-withOptions f = execParser prog >>= f
+withOptions f = f =<< execParser
+    (parseOptions `withInfo` "Interact with the heroku build API")
 
-prog :: ParserInfo Options
-prog = info (helper <*> opts) $
-    fullDesc <> progDesc "Interact with the heroku build API"
+withInfo :: Parser a -> String -> ParserInfo a
+withInfo opts desc = info (helper <*> opts) $ progDesc desc
 
-opts :: Parser Options
-opts = Options
-    <$> strOption
-        (long "app"
-      <> short 'a'
-      <> metavar "COMPILE-APP"
-      <> help "Heroku app on which to compile")
-    <*> subparser
-        (cmd "start" startOptions "Start a build on the compilation app"
-      <> cmd "status" statusOptions "Check the status of a build"
-      <> cmd "release" releaseOptions "Release a successful build")
+parseOptions :: Parser Options
+parseOptions = Options <$> parseApp <*> parseCommand
 
-  where
-    cmd c o d = command c (info (helper <*> o) $ progDesc d)
+parseApp :: Parser String
+parseApp = strOption $
+    short 'a' <> long "app" <> metavar "COMPILE-APP" <>
+    help "Heroku app on which to compile"
 
-startOptions :: Parser Command
-startOptions = Start
+parseCommand :: Parser Command
+parseCommand = subparser $
+    command "start" (parseStart `withInfo` "Start a build on the compilation app") <>
+    command "status" (parseStatus `withInfo` "Check the status of a build") <>
+    command "release" (parseRelease `withInfo` "Release a successful build")
+
+parseStart :: Parser Command
+parseStart = Start
     <$> fmap T.pack (argument str (metavar "SOURCE-URL"))
     <*> fmap T.pack (argument str (metavar "VERSION"))
 
-statusOptions :: Parser Command
-statusOptions = Status <$> argument str (metavar "BUILD-ID")
+parseStatus :: Parser Command
+parseStatus = Status <$> argument str (metavar "BUILD-ID")
 
-releaseOptions :: Parser Command
-releaseOptions = Release
+parseRelease :: Parser Command
+parseRelease = Release
     <$> argument str (metavar "BUILD-ID")
     <*> argument str (metavar "RELEASE-APP")
