@@ -5,11 +5,9 @@ builds, or release built slugs to other applications.
 
 ## Installation
 
-*Note: not released yet...*
-
 ```
-% cabal update
-% cabal install heroku-build
+% stack install
+% heroku-build --help
 ```
 
 ## Prerequisites

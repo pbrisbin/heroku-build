@@ -5,6 +5,7 @@ module HerokuBuild.Options
     ) where
 
 import Options.Applicative
+import Data.Semigroup ((<>))
 import Data.Text (Text)
 import qualified Data.Text as T
 

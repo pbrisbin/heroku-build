@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HerokuBuild.JSONSpec (main, spec) where
 
 import HerokuBuild.JSON

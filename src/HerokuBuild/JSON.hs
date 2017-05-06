@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HerokuBuild.JSON
     ( Build(..)
     , Status(..)
@@ -8,7 +9,6 @@ module HerokuBuild.JSON
     , newBuild
     ) where
 
-import Control.Applicative
 import Control.Monad
 import Data.Aeson hiding (Success)
 import Data.Text (Text)

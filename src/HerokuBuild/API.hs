@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HerokuBuild.API
     ( ApiKey
     , getHeroku
@@ -33,9 +34,9 @@ heroku' k p modify = herokuReq k p modify >> return ()
 
 herokuReq :: ApiKey -> String -> (Request -> Request) -> IO L.ByteString
 herokuReq k p modify = do
-    req <- parseUrl $ herokuApi ++ p
-    rsp <- withManager $ httpLbs $ modify $ req
-            { requestHeaders = herokuHeaders k }
+    req <- parseUrlThrow $ herokuApi ++ p
+    mgr <- newManager tlsManagerSettings
+    rsp <- httpLbs (modify $ req { requestHeaders = herokuHeaders k }) mgr
 
     return $ responseBody rsp
 
